@@ -157,17 +157,90 @@ for k = 1:3
     exportgraphics(figk, fname, 'ContentType', 'vector');
 end
 
-%% ---------------- (Opcional) Comparacao com dados do PSIM --------------
-% Se voce exportar o MEDICOES.txt de cada pasta do PSIM para o mesmo
-% diretorio do MATLAB Online, descomente o bloco abaixo para sobrepor
-% os pontos medidos no PSIM com a curva analitica em MATLAB.
+%% ---------------- Exportacao de tabelas para comparacao com o PSIM -----
+% Gera um arquivo .txt por caso, com os valores calculados (analitico)
+% EXATAMENTE nos mesmos instantes de tempo do MEDICOES.txt do PSIM
+% (1 ms a 100 ms, passo de 1 ms) -> facil de colocar lado a lado.
 %
-% psim = readmatrix('SUPERAMORTECIDO_MEDICOES.txt'); % ajuste o nome/colunas
-% figure;
-% plot(results(3).t*1e3, results(3).i, 'b-', 'LineWidth', 1.5); hold on;
-% plot(psim(:,1)*1e3, psim(:,3), 'ro', 'MarkerSize', 4); % coluna IT do PSIM
-% legend('MATLAB (analitico)', 'PSIM'); grid on;
-% xlabel('Tempo (ms)'); ylabel('i(t) [A]');
-% title('Comparacao MATLAB x PSIM - caso superamortecido');
+% Se o arquivo MEDICOES.txt do PSIM correspondente estiver na mesma pasta
+% do MATLAB Online (renomeie/ajuste o nome no vetor 'arquivos_psim' abaixo),
+% o script tambem calcula o erro absoluto e o erro percentual automaticamente.
+
+t_psim = (0.001:0.001:0.1)';   % mesma janela e passo do MEDICOES.txt
+
+% Nomes dos arquivos MEDICOES.txt do PSIM (ajuste se necessario).
+% Deixe '' (vazio) se voce nao for subir o arquivo do PSIM no MATLAB Online.
+arquivos_psim = {'MEDICOES_subamortecido.txt', ...
+                 'MEDICOES_criticamente_amortecido.txt', ...
+                 'MEDICOES_superamortecido.txt'};
+
+% Coluna (dentro do MEDICOES.txt) onde estao IT e VC em cada pasta do
+% repositorio original (a ordem das colunas NAO e igual em todas!):
+%   SUBAMORTECIDO / SUPERAMORTECIDO : Time, VI, IT, VC, VR  -> IT=col3, VC=col4
+%   CRITICAMENTE_AMORTECIDO         : Time, IT, VI, VR, VC  -> IT=col2, VC=col5
+col_IT = [3, 2, 3];   % k = 1 (Sub), 2 (Critico), 3 (Super)
+col_VC = [4, 5, 4];
+
+for k = 1:3
+    R = results(k).R;
+    alpha = R/(2*L);
+    wn    = 1/sqrt(L*C);
+    disc  = alpha^2 - wn^2;
+
+    if disc > 1e-6
+        s1 = -alpha + sqrt(disc); s2 = -alpha - sqrt(disc);
+        i_calc  = (Vs/L) * (exp(s2*t_psim) - exp(s1*t_psim)) / (s2 - s1);
+        vC_calc = Vs*( 1 + (s1.*exp(s2*t_psim) - s2.*exp(s1*t_psim))/(s2 - s1) );
+    elseif abs(disc) <= 1e-6
+        i_calc  = (Vs/L) * t_psim .* exp(-alpha*t_psim);
+        vC_calc = Vs*( 1 - (1 + alpha*t_psim).*exp(-alpha*t_psim) );
+    else
+        wd = sqrt(-disc);
+        i_calc  = (Vs/(wd*L)) * exp(-alpha*t_psim) .* sin(wd*t_psim);
+        vC_calc = Vs*( 1 - exp(-alpha*t_psim).*( cos(wd*t_psim) + (alpha/wd)*sin(wd*t_psim) ) );
+    end
+    vR_calc = R * i_calc;
+    vL_calc = Vs - vR_calc - vC_calc;
+
+    fname_out = sprintf('calculado_%s.txt', strrep(lower(results(k).nome),' ','_'));
+    fid = fopen(fname_out, 'w');
+
+    % Tenta carregar o MEDICOES.txt do PSIM correspondente (opcional)
+    tem_psim = false;
+    if ~isempty(arquivos_psim{k}) && isfile(arquivos_psim{k})
+        try
+            psim = readmatrix(arquivos_psim{k}, 'NumHeaderLines', 1);
+            IT_psim = psim(:, col_IT(k));
+            VC_psim = psim(:, col_VC(k));
+            tem_psim = true;
+        catch
+            tem_psim = false;
+        end
+    end
+
+    if tem_psim
+        erro_IT = i_calc - IT_psim;
+        erro_VC = vC_calc - VC_psim;
+        fprintf(fid, '%-14s %-14s %-14s %-14s %-14s %-14s %-14s\n', ...
+            'Time(s)','IT_calc(A)','IT_psim(A)','Erro_IT(A)', ...
+            'VC_calc(V)','VC_psim(V)','Erro_VC(V)');
+        for n = 1:length(t_psim)
+            fprintf(fid, '%-14.6e %-14.6e %-14.6e %-14.6e %-14.6e %-14.6e %-14.6e\n', ...
+                t_psim(n), i_calc(n), IT_psim(n), erro_IT(n), ...
+                vC_calc(n), VC_psim(n), erro_VC(n));
+        end
+        fprintf('  -> %s comparado ao PSIM: erro max IT = %.4g A | erro max VC = %.4g V\n', ...
+            results(k).nome, max(abs(erro_IT)), max(abs(erro_VC)));
+    else
+        fprintf(fid, '%-14s %-14s %-14s %-14s %-14s\n', ...
+            'Time(s)','IT_calc(A)','VC_calc(V)','VR_calc(V)','VL_calc(V)');
+        for n = 1:length(t_psim)
+            fprintf(fid, '%-14.6e %-14.6e %-14.6e %-14.6e %-14.6e\n', ...
+                t_psim(n), i_calc(n), vC_calc(n), vR_calc(n), vL_calc(n));
+        end
+    end
+    fclose(fid);
+    fprintf('Tabela exportada: %s\n', fname_out);
+end
 
 fprintf('\nConcluido. PDFs vetoriais exportados no diretorio atual.\n');
