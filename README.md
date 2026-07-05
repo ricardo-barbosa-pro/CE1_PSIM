@@ -89,6 +89,7 @@ The project also investigates the influence of the circuit parameters (**R**, **
 ├── OVERLEAF/
 │   ├── CIRCUITOS ELETRICOS I - Circuito RLC.tex
 
+├── INSTRUCOES
 └── README.md
 ```
 
