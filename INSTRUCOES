@@ -1,0 +1,16 @@
+1 – Simulação e comparação de um circuito RLC
+a) Simulação numérica no PSIM para um circuito RLC;
+b)Simulação numérica (no Matlab por exemplo) através das equações dinâmicas do
+sistema;
+c) Comparação dos resultados;
+Observações:
+a) As simulações devem ser apresentadas para os casos superamortecido, criticamente
+amortecido e subamortecido;
+b) Deve ser apresentado para o três casos de simulações, a resposta genérica em função
+dos parâmetros do circuito (R, L e C) e condições iniciais (v(0) = V0, ….).
+c) Todas figuras apresentadas devem ser produzidas no formato vetorial;
+d) Todos os gráficos apresentados devem ser produzidas no formato vetorial;
+e) Recomendo a utilização https://www.overleaf.com/ para produção do relatório.
+Utilizar o formato de artigo IEEE para entrega do documento.
+f) Artigo deve ter no mínimo as seguintes seções: (Abstract, Introduction, RLC circuit
+Analysis, Results, Conclusion)
