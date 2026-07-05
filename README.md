@@ -44,9 +44,31 @@ The project also investigates the influence of the circuit parameters (**R**, **
 │   ├── functions/
 │   └── figures/
 │
-├── psim/
-│   ├── circuits/
-│   └── simulations/
+├── PSIM/
+|   ├── CRITICAMENTE AMORTECIDO
+|   |   ├── CIRCUITO.png
+|   |   ├── IT.png
+|   |   ├── VC.png
+|   |   ├── VR.png
+|   |   ├── VI.png
+|   |   ├── MEDIÇÕES.txt
+|   |   ├── Criticamente Amortecido.psimsch
+│   ├── SUBAMORTECIDO
+|   |   ├── CIRCUITO.png
+|   |   ├── IT.png
+|   |   ├── VC.png
+|   |   ├── VR.png
+|   |   ├── VI.png
+|   |   ├── MEDIÇÕES.txt
+|   |   ├── Subamortecido.psimsch
+│   ├── SUPERAMORTECIDO
+|   |   ├── CIRCUITO.png
+|   |   ├── IT.png
+|   |   ├── VC.png
+|   |   ├── VR.png
+|   |   ├── VI.png
+|   |   ├── MEDIÇÕES.txt
+|   |   ├── Superamortecido.psimsch
 │
 ├── report/
 │   ├── figures/
