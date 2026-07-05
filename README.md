@@ -80,13 +80,15 @@ The project also investigates the influence of the circuit parameters (**R**, **
 |   |   ├── MEDIÇÕES.txt
 |   |   ├── Superamortecido.psimsch
 │
-├── report/
-│   ├── figures/
-│   ├── ieee/
-│   └── references/
+├── COMPARACOES/
+│   ├── README.md
+│   ├── comparacao_PSIMxMATHLAB_criticamente_amortecido.txt
+│   ├── comparacao_PSIMxMATHLAB_subamortecido.txt
+│   └── comparacao_PSIMxMATHLAB_superamortecido.txt
 │
-├── docs/
-│
+├── OVERLEAF/
+│   ├── CIRCUITOS ELETRICOS I - Circuito RLC.tex
+
 └── README.md
 ```
 
