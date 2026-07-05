@@ -44,6 +44,9 @@ The project also investigates the influence of the circuit parameters (**R**, **
 │   ├── CODE.m
 │   ├── VC.png
 │   ├── IT.png
+│   ├── calculado_criticamente_amortecido.txt
+│   ├── calculado_subamortecido.txt
+│   ├── calculado_superamortecido.txt
 │   ├── Criticamente_Amortecido.png
 │   ├── Subamortecido.png
 │   └── Superamortecido.png
