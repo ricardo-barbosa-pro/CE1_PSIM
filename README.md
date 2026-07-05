@@ -39,10 +39,14 @@ The project also investigates the influence of the circuit parameters (**R**, **
 
 ```text
 .
-├── matlab/
-│   ├── scripts/
-│   ├── functions/
-│   └── figures/
+├── MATHLAB/
+|   ├── README.md
+│   ├── CODE.m
+│   ├── VC.png
+│   ├── IT.png
+│   ├── Criticamente_Amortecido.png
+│   ├── Subamortecido.png
+│   └── Superamortecido.png
 │
 ├── PSIM/
 |   ├── CRITICAMENTE AMORTECIDO
