@@ -87,7 +87,7 @@ The project also investigates the influence of the circuit parameters (**R**, **
 │   └── comparacao_PSIMxMATHLAB_superamortecido.txt
 │
 ├── OVERLEAF/
-│   ├── CIRCUITOS ELETRICOS I - Circuito RLC.tex
+│   ├── Example_IEEE
 
 ├── INSTRUCOES
 └── README.md
